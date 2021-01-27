@@ -42,8 +42,6 @@ mean
 median 
 #3. 
 
-??ifelse
-
 ifelse(median>mean, mean, median)
 
 ```
