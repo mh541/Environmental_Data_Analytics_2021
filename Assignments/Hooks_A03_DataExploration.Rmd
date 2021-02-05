@@ -68,19 +68,15 @@ dim(neonics)
 
 6. Using the `summary` function on the "Effects" column, determine the most common effects that are studied. Why might these effects specifically be of interest?
 ```{r}
-word.freq<-c(neonics$Effect)
-
-sort(table(word.freq), decreasing = T)
-word.freq
+sort(table(neonics$Effect), decreasing = T)
 ```
-
 
 > Answer: 
 
 7. Using the `summary` function, determine the six most commonly studied species in the dataset (common name). What do these species have in common, and why might they be of interest over other insects? Feel free to do a brief internet search for more information if needed.
 
 ```{r}
-summary(neonics$Species.Common.Name)
+sort(table(neonics$Species.Common.Name), decreasing = T)[1:6]
 ```
 
 > Answer: 
@@ -115,7 +111,7 @@ Interpret this graph. What are the most common test locations, and do they diffe
 
 11. Create a bar graph of Endpoint counts. What are the two most common end points, and how are they defined? Consult the ECOTOX_CodeAppendix for more information. 
 
-```{r}
+```{r, fig.height = 5, fig.width = 7}
 ggplot(neonics)+
   geom_bar(aes(x=Endpoint))
 ```
@@ -127,25 +123,35 @@ ggplot(neonics)+
 
 12. Determine the class of collectDate. Is it a date? If not, change to a date and confirm the new class of the variable. Using the `unique` function, determine which dates litter was sampled in August 2018. 
 ```{r}
-
+class(litter$collectDate)
+as.Date(litter$collectDate)
 ```
+```{r}
+unique(litter$collectDate)
+```
+
 
 13. Using the `unique` function, determine how many plots were sampled at Niwot Ridge. How is the information obtained from `unique` different from that obtained from `summary`?
 
 ```{r}
-
+unique(litter$plotID)
 ```
 
 > Answer: 
 
 14. Create a bar graph of functionalGroup counts. This shows you what type of litter is collected at the Niwot Ridge sites. Notice that litter types are fairly equally distributed across the Niwot Ridge sites.
-```{r}
-
+```{r, fig.height = 3, fig.width = 4}
+ggplot(litter)+
+  geom_bar(aes(x=functionalGroup))
 ```
 
 15. Using `geom_boxplot` and `geom_violin`, create a boxplot and a violin plot of dryMass by functionalGroup. 
 ```{r}
+ggplot(litter)+
+  geom_boxplot(aes(x=functionalGroup, y=dryMass))
 
+ggplot(litter)+
+  geom_violin(aes(x=dryMass, y=functionalGroup))
 ```
 
 Why is the boxplot a more effective visualization option than the violin plot in this case?
