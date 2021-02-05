@@ -43,18 +43,18 @@ str(litter)
 
 2. The neonicotinoid dataset was collected from the Environmental Protection Agency's ECOTOX Knowledgebase, a database for ecotoxicology research. Neonicotinoids are a class of insecticides used widely in agriculture. The dataset that has been pulled includes all studies published on insects. Why might we be interested in the ecotoxicologoy of neonicotinoids on insects? Feel free to do a brief internet search if you feel you need more background information. 
 
-> Answer: 
+> Answer: According to what I read on the internet, these particularly effect bees. Bees are paramount to having a healthy ecosystem.
 
 3. The Niwot Ridge litter and woody debris dataset was collected from the National Ecological Observatory Network, which collectively includes 81 aquatic and terrestrial sites across 20 ecoclimatic domains. 32 of these sites sample forest litter and woody debris, and we will focus on the Niwot Ridge long-term ecological research (LTER) station in Colorado. Why might we be interested in studying litter and woody debris that falls to the ground in forests? Feel free to do a brief internet search if you feel you need more background information. 
 
-> Answer: 
+> Answer: According to a USDA article I saw, this litter/debris is important in managing wildfire risks. This is especially important as we see wildfires increase in frequency and intensity.
 
 4. How is litter and woody debris sampled as part of the NEON network? Read the NEON_Litterfall_UserGuide.pdf document to learn more. List three pieces of salient information about the sampling methods here: 
 
 > Answer: 
-*
-*
-*
+*Sampled randomly within the 90% flux footprint of the primary and secondary airsheds
+*In sites with forested tower airsheds, the li􏰀er sampling is targeted to take place in 20 40m x 40m plots.
+*n sites with low-statured vegeta􏰁on over the tower airsheds, li􏰀er sampling is targeted to take place in 4 40m x 40m tower plots (to accommodate co-located soil sampling) plus 26 20m x 20m plots
 
 
 
@@ -71,15 +71,15 @@ dim(neonics)
 sort(table(neonics$Effect), decreasing = T)
 ```
 
-> Answer: 
+> Answer: The most common effects of population and mortality are important in measuring the health and growth of a species. We want to know if a species is dying or growing, especially if they are bees
 
 7. Using the `summary` function, determine the six most commonly studied species in the dataset (common name). What do these species have in common, and why might they be of interest over other insects? Feel free to do a brief internet search for more information if needed.
 
 ```{r}
-sort(table(neonics$Species.Common.Name), decreasing = T)[1:6]
+sort(table(neonics$Species.Common.Name), decreasing = T) [1:6]
 ```
 
-> Answer: 
+> Answer: All of these species are bees, and as I mentioned earlier this is crucial for having a healthy ecosystem, especially for plants. 
 
 8. Concentrations are always a numeric value. What is the class of Conc.1..Author. in the dataset, and why is it not numeric?
 
@@ -87,9 +87,7 @@ sort(table(neonics$Species.Common.Name), decreasing = T)[1:6]
 class(neonics$Conc.1..Author.)
 ```
 
-> Answer:
-
-
+> Answer: The CSV transfers the data over as a character, but we can change it to numeric using the as.numeric function
 
 ## Explore your data graphically (Neonics)
 
@@ -107,7 +105,7 @@ ggplot(neonics) +
 
 Interpret this graph. What are the most common test locations, and do they differ over time?
 
-> Answer: 
+> Answer: Lab has almost always been the predominant test location, field undeterminable has always been present but never a common one, and then overtime field natural rose. Lab is by far the most common over time.
 
 11. Create a bar graph of Endpoint counts. What are the two most common end points, and how are they defined? Consult the ECOTOX_CodeAppendix for more information. 
 
@@ -116,8 +114,8 @@ ggplot(neonics)+
   geom_bar(aes(x=Endpoint))
 ```
 
-> Answer: 
->
+> Answer: The most common by far are LOEL (Lowest-observable-effect-level) and NOEL (No-observable-effect-level). LOEL is defined as lowest dose (concentration) producing effects that were significantly different (as reported by authors) from responses of controls. Noel is defined as highest dose (concentration) producing effects not significantly different from responses of controls according to author's reported statistical test
+
 
 ## Explore your data (Litter)
 
@@ -135,9 +133,10 @@ unique(litter$collectDate)
 
 ```{r}
 unique(litter$plotID)
+summary(litter$plotID)
 ```
 
-> Answer: 
+> Answer: There are 12 plots saampled at Niwot Ridge. Unique allows me to see which ones and how many. Summary counts how many plots were ID'd and tells me their class and mode.
 
 14. Create a bar graph of functionalGroup counts. This shows you what type of litter is collected at the Niwot Ridge sites. Notice that litter types are fairly equally distributed across the Niwot Ridge sites.
 ```{r, fig.height = 3, fig.width = 4}
@@ -156,8 +155,8 @@ ggplot(litter)+
 
 Why is the boxplot a more effective visualization option than the violin plot in this case?
 
-> Answer: 
+> Answer: The boxplot allows the user to see the median, the skews, and outliers.The violin plot is hard to see and therefore hard to understand.
 
 What type(s) of litter tend to have the highest biomass at these sites? 
 
-> Answer: 
+> Answer: Needles are the highest in biomass, followed by mixed.
