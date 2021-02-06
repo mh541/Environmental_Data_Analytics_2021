@@ -111,7 +111,7 @@ Interpret this graph. What are the most common test locations, and do they diffe
 
 ```{r, fig.height = 5, fig.width = 7}
 ggplot(neonics)+
-  geom_bar(aes(x=Endpoint))
+  geom_bar(aes(x=Endpoint, color=Endpoint, fill=Endpoint))
 ```
 
 > Answer: The most common by far are LOEL (Lowest-observable-effect-level) and NOEL (No-observable-effect-level). LOEL is defined as lowest dose (concentration) producing effects that were significantly different (as reported by authors) from responses of controls. Noel is defined as highest dose (concentration) producing effects not significantly different from responses of controls according to author's reported statistical test
@@ -141,16 +141,16 @@ summary(litter$plotID)
 14. Create a bar graph of functionalGroup counts. This shows you what type of litter is collected at the Niwot Ridge sites. Notice that litter types are fairly equally distributed across the Niwot Ridge sites.
 ```{r, fig.height = 3, fig.width = 4}
 ggplot(litter)+
-  geom_bar(aes(x=functionalGroup))
+  geom_bar(aes(x=functionalGroup, fill=functionalGroup))
 ```
 
 15. Using `geom_boxplot` and `geom_violin`, create a boxplot and a violin plot of dryMass by functionalGroup. 
 ```{r}
 ggplot(litter)+
-  geom_boxplot(aes(x=functionalGroup, y=dryMass))
+  geom_boxplot(aes(x=functionalGroup, y=dryMass, fill=functionalGroup, color=functionalGroup))
 
 ggplot(litter)+
-  geom_violin(aes(x=dryMass, y=functionalGroup))
+  geom_violin(aes(x=dryMass, y=functionalGroup, color=functionalGroup, fill=functionalGroup))
 ```
 
 Why is the boxplot a more effective visualization option than the violin plot in this case?
