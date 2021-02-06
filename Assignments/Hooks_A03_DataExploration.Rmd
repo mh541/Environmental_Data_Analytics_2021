@@ -147,10 +147,10 @@ ggplot(litter)+
 15. Using `geom_boxplot` and `geom_violin`, create a boxplot and a violin plot of dryMass by functionalGroup. 
 ```{r}
 ggplot(litter)+
-  geom_boxplot(aes(x=functionalGroup, y=dryMass, fill=functionalGroup, color=functionalGroup))
+  geom_boxplot(aes(x=functionalGroup, y=dryMass, fill=functionalGroup))
 
 ggplot(litter)+
-  geom_violin(aes(x=dryMass, y=functionalGroup, color=functionalGroup, fill=functionalGroup))
+  geom_violin(aes(x=dryMass, y=functionalGroup,fill=functionalGroup, color=functionalGroup))
 ```
 
 Why is the boxplot a more effective visualization option than the violin plot in this case?
