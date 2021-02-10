@@ -1,8 +1,8 @@
 ---
-title: "Assignment 3: Data Exploration"
+title: 'Assignment 3: Data Exploration'
 author: "Mandy Hooks"
-output: pdf_document
 geometry: margin=2.54cm
+output: pdf_document
 ---
 
 ## OVERVIEW
@@ -22,13 +22,17 @@ The completed exercise is due on <>.
 ## Set up your R session
 
 1. Check your working directory, load necessary packages (tidyverse), and upload two datasets: the ECOTOX neonicotinoid dataset (ECOTOX_Neonicotinoids_Insects_raw.csv) and the Niwot Ridge NEON dataset for litter and woody debris (NEON_NIWO_Litter_massdata_2018-08_raw.csv). Name these datasets "Neonics" and "Litter", respectively. 
+
 ```{r,  message = FALSE}
 getwd()
 ```
 
 ```{r}
+library(tinytex)
 library(tidyverse)
 library(ggplot2)
+library(knitr)
+library(utf8)
 
 neonics<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv")
 head(neonics,10)
@@ -53,8 +57,8 @@ str(litter)
 
 > Answer: 
 *Sampled randomly within the 90% flux footprint of the primary and secondary airsheds
-*In sites with forested tower airsheds, the li􏰀er sampling is targeted to take place in 20 40m x 40m plots.
-*n sites with low-statured vegeta􏰁on over the tower airsheds, li􏰀er sampling is targeted to take place in 4 40m x 40m tower plots (to accommodate co-located soil sampling) plus 26 20m x 20m plots
+*In sites with forested tower airsheds, the litter sampling is targeted to take place in 20 40m x 40m plots.
+*in sites with low-statured vegetation over the tower airsheds, liter sampling is targeted to take place in 4 40m x 40m tower plots (to accommodate co-located soil sampling) plus 26 20m x 20m plots
 
 
 
@@ -77,6 +81,7 @@ sort(table(neonics$Effect), decreasing = T)
 
 ```{r}
 sort(table(neonics$Species.Common.Name), decreasing = T) [1:6]
+summary(neonics$Species.Common.Name)
 ```
 
 > Answer: All of these species are bees, and as I mentioned earlier this is crucial for having a healthy ecosystem, especially for plants. 
