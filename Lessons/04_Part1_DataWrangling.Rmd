@@ -119,7 +119,7 @@ class(NTL.phys.data$year4)
 ```
 Question: Why don't we filter using row numbers?
 
-> Answer: 
+> Answer: Could produce a reproducibility issue especially once we start manipulating the data
 
 ### Arrange
 
