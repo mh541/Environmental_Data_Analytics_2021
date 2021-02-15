@@ -1,6 +1,6 @@
 ---
 title: "Assignment 4: Data Wrangling"
-author: "Student Name"
+author: "Mandy Hooks"
 output: pdf_document
 geometry: margin=2.54cm
 ---
@@ -25,8 +25,33 @@ The completed exercise is due on Tuesday, Feb 16 @ 11:59pm.
 
 ```{r, message = FALSE}
 #1
-
+library(tidyverse)
+library(lubridate)
+ozone.2018<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Raw/EPAair_O3_NC2018_raw.csv", stringsAsFactors = TRUE)
+ozone.2019<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Raw/EPAair_O3_NC2019_raw.csv", stringsAsFactors = TRUE)
+PM25.2018<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Raw/EPAair_PM25_NC2018_raw.csv", stringsAsFactors = TRUE)
+PM25.2019<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Raw/EPAair_PM25_NC2019_raw.csv", stringsAsFactors = TRUE)
 #2
+
+#Ozone 2018
+colnames(ozone.2018)
+str(ozone.2018)
+dim(ozone.2018)
+
+#Ozone 2019
+colnames(ozone.2019)
+str(ozone.2019)
+dim(ozone.2019)
+
+#PM25 2018
+colnames(PM25.2018)
+str(PM25.2018)
+dim(PM25.2018)
+
+#PM 2019
+colnames(PM25.2019)
+str(PM25.2019)
+dim(PM25.2019)
 ```
 
 ## Wrangle individual datasets to create processed files.
@@ -37,12 +62,32 @@ The completed exercise is due on Tuesday, Feb 16 @ 11:59pm.
 
 ```{r}
 #3
+ozone.2018$Date<-as.Date(ozone.2018$Date, format = "%m/%d/%Y")
+ozone.2019$Date<-as.Date(ozone.2019$Date, format = "%m/%d/%y")
+PM25.2018$Date<-as.Date(PM25.2018$Date, format = "%m/%d/%y")
+PM25.2019$Date<-as.Date(PM25.2019$Date, format = "%m/%d/%y")
 
 #4
+ozone.2018.proc<- ozone.2018 %>%
+  select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC,     COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+ozone.2019.proc<- ozone.2019 %>%
+  select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+PM25.2018.proc<- PM25.2018 %>%
+  select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+PM25.2019.proc<- PM25.2019 %>%
+  select(Date, DAILY_AQI_VALUE, Site.Name, AQS_PARAMETER_DESC, COUNTY, SITE_LATITUDE, SITE_LONGITUDE)
+
 
 #5
 
+PM25.2018.proc<- mutate(PM25.2018.proc, AQS_PARAMETER_DESC = "PM2.5")
+PM25.2019.proc<- mutate(PM25.2019.proc, AQS_PARAMETER_DESC = "PM2.5")
+
 #6
+write.csv(ozone.2018.proc, row.names = FALSE, file="/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Processed/EPAair_O3_NC2018_processed.csv")
+write.csv(ozone.2019.proc, row.names = FALSE, file="/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Processed/EPAair_O3_NC2019_processed.csv")
+write.csv(PM25.2018.proc, row.names = FALSE, file="/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Processed/EPAair_PM25_NC2018_processed.csv")
+write.csv(PM25.2019.proc, row.names = FALSE, file="/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Processed/EPAair_PM25_NC2019_processed.csv")
 
 ```
 
@@ -62,14 +107,35 @@ The completed exercise is due on Tuesday, Feb 16 @ 11:59pm.
 
 ```{r}
 #7
+EPAcombined <- rbind(ozone.2018.proc, ozone.2019.proc, PM25.2018.proc, PM25.2019.proc)
 
 #8
+EPAcombined.proc <- EPAcombined %>%
+  filter(Site.Name %in% c("Linville Falls", "Durham Armory", "Leggett", 
+                        "Hattie Avenue", "Clemmons Middle", "Mendenhall School", 
+                        "Frying Pan Mountain", "West Johnston Co.", "Garinger High School", 
+                        "Castle Hayne", "Pitt Agri. Center", "Bryson City", "Millbrook School")) %>%
+group_by(Date, Site.Name, AQS_PARAMETER_DESC, COUNTY) %>%
+  summarise(meanAQI = mean(DAILY_AQI_VALUE), 
+            meanLatitude = mean(SITE_LATITUDE), 
+            meanLongitude = mean(SITE_LONGITUDE))%>%
+  mutate(month = month(Date)) %>%
+  mutate(year= year(Date))
+       
 
-#9
+EPAcombined.proc$Date<-as.Date(EPAcombined.proc$Date, format = "%m/%d/%Y")
 
+class(Date)
+
+#9 
+
+EPAcombined.proc.pivot <- spread(EPAcombined.proc, AQS_PARAMETER_DESC, meanAQI)
+                    
 #10
+dim(EPAcombined.proc.pivot)
 
 #11
+write.csv(EPAcombined.proc.pivot, row.names = FALSE, file="/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Processed/EPAcombined_O3_PM25_NC1718_Processed.csv")
 
 ```
 
@@ -82,12 +148,25 @@ The completed exercise is due on Tuesday, Feb 16 @ 11:59pm.
 ```{r}
 #12a
 
+EPAcombined.proc.pivot.summaries <- 
+ EPAcombined.proc.pivot %>%
+  group_by(Site.Name, month, year) %>%
+  summarise(meanOzone = mean(Ozone), 
+            meanPM25 = mean(PM2.5))
+
 #12b
+EPAcombined.proc.pivot.summaries.drop<-
+  EPAcombined.proc.pivot.summaries%>%
+  drop_na(month, year)
+
+#view(EPAcombined.proc.pivot.summaries.drop)
 
 #13
+
+dim(EPAcombined.proc.pivot.summaries.drop)
 
 ```
 
 14. Why did we use the function `drop_na` rather than `na.omit`?
 
-> Answer: 
+> Answer: na.omit drops the rows but not the row numbers, which could create problems with handling the data. Drop_na drops the row if there is missing data, so in the end all columns will have the same number of rows
