@@ -27,10 +27,10 @@ The completed exercise is due on Tuesday, Feb 16 @ 11:59pm.
 #1
 library(tidyverse)
 library(lubridate)
-ozone.2018<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Raw/EPAair_O3_NC2018_raw.csv", stringsAsFactors = TRUE)
-ozone.2019<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Raw/EPAair_O3_NC2019_raw.csv", stringsAsFactors = TRUE)
-PM25.2018<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Raw/EPAair_PM25_NC2018_raw.csv", stringsAsFactors = TRUE)
-PM25.2019<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Raw/EPAair_PM25_NC2019_raw.csv", stringsAsFactors = TRUE)
+ozone.2018<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Raw/EPAair_O3_NC2018_raw.csv", stringsAsFactors = FALSE)
+ozone.2019<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Raw/EPAair_O3_NC2019_raw.csv", stringsAsFactors = FALSE)
+PM25.2018<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Raw/EPAair_PM25_NC2018_raw.csv", stringsAsFactors = FALSE)
+PM25.2019<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Raw/EPAair_PM25_NC2019_raw.csv", stringsAsFactors = FALSE)
 #2
 
 #Ozone 2018
@@ -63,9 +63,9 @@ dim(PM25.2019)
 ```{r}
 #3
 ozone.2018$Date<-as.Date(ozone.2018$Date, format = "%m/%d/%Y")
-ozone.2019$Date<-as.Date(ozone.2019$Date, format = "%m/%d/%y")
-PM25.2018$Date<-as.Date(PM25.2018$Date, format = "%m/%d/%y")
-PM25.2019$Date<-as.Date(PM25.2019$Date, format = "%m/%d/%y")
+ozone.2019$Date<-as.Date(ozone.2019$Date, format = "%m/%d/%Y")
+PM25.2018$Date<-as.Date(PM25.2018$Date, format = "%m/%d/%Y")
+PM25.2019$Date<-as.Date(PM25.2019$Date, format = "%m/%d/%Y")
 
 #4
 ozone.2018.proc<- ozone.2018 %>%
@@ -115,7 +115,7 @@ EPAcombined.proc <- EPAcombined %>%
                         "Hattie Avenue", "Clemmons Middle", "Mendenhall School", 
                         "Frying Pan Mountain", "West Johnston Co.", "Garinger High School", 
                         "Castle Hayne", "Pitt Agri. Center", "Bryson City", "Millbrook School")) %>%
-group_by(Date, Site.Name, AQS_PARAMETER_DESC, COUNTY) %>%
+  group_by(Date, Site.Name, AQS_PARAMETER_DESC, COUNTY) %>%
   summarise(meanAQI = mean(DAILY_AQI_VALUE), 
             meanLatitude = mean(SITE_LATITUDE), 
             meanLongitude = mean(SITE_LONGITUDE))%>%
@@ -132,12 +132,13 @@ class(Date)
 EPAcombined.proc.pivot <- spread(EPAcombined.proc, AQS_PARAMETER_DESC, meanAQI)
                     
 #10
-dim(EPAcombined.proc.pivot)
+dim(EPAcombined.proc)
 
 #11
-write.csv(EPAcombined.proc.pivot, row.names = FALSE, file="/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Processed/EPAcombined_O3_PM25_NC1718_Processed.csv")
+write.csv(EPAcombined.proc.pivot, row.names = FALSE, file="/Users/mandyhooks/Environmental_Data_Analytics_2021/Data/Processed/EPAair_O3_PM25_NC1718_Processed.csv")
 
 ```
+
 
 
 ## Generate summary tables
