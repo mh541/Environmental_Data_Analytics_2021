@@ -97,6 +97,7 @@ PMplot <-
   ggplot(EPAair, aes(x = Month, y = PM2.5, shape = as.factor(Year), color = Site.Name)) +
   geom_point()
 print(PMplot)
+```
 
 # Separate plot with facets
 PMplot.faceted <-
