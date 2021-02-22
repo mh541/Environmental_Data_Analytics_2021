@@ -39,9 +39,9 @@ library(tidyverse)
 library(cowplot)
 library(ggplot2)
 
-LakeChem<-read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv", stringsAsFactors = TRUE)
-GathNut<-read.csv("./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaulGathered_Processed.csv", stringsAsFactors = TRUE)
-NiwotRidge<-read.csv(".//Data/Processed/NEON_NIWO_Litter_mass_trap_Processed.csv", stringsAsFactors = TRUE)
+LakeChem<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021//Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv", stringsAsFactors = TRUE)
+GathNut<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021//Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaulGathered_Processed.csv", stringsAsFactors = TRUE)
+NiwotRidge<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021//Data/Processed/NEON_NIWO_Litter_mass_trap_Processed.csv", stringsAsFactors = TRUE)
 
 #2 
 
@@ -79,41 +79,57 @@ print(phosplot)
 
 ```{r fig.height = 3, fig.width = 4, warning = FALSE}
 #Temperature Boxplot
-boxtemp<-ggplot(LakeChem, aes(x=month, y=temperature_C))+
+boxtemp<-ggplot(LakeChem, aes(x=month, y=temperature_C, shape=as.factor(month)))+
   geom_boxplot(aes(color=lakename))+
-  labs(x="Month", y="Temperature in Celsius", color="Lake Name", title="Temperature over the year of Peter and Paul Lakes")+
+  labs(x="Month", y="Temperature in Celsius", color="Lake Name", title="Temperature over the year of Peter and Paul Lakes")
 print(boxtemp)
 
+
 #TP Boxplot
-boxtp<- ggplot(LakeChem, aes(x=month, y=tp_ug))+
-  geom_boxplot(aes(color=lakename))+
+boxtp<- ggplot(LakeChem, aes(x=month, y=tp_ug, shape= as.factor(month)))+
+  geom_boxplot(color=lakename)+
   ylim(5,15)+
+  facet_wrap(vars(lakename), nrow = 2)+
   labs(x="Month", y="Phosphorus", color="Lake Name", title="Phosphorus concentration over the year of Peter and Paul Lakes")
 print(boxtp)
 
 #TN Boxplot
-boxtn<- ggplot(LakeChem, aes(x=month, y=tn_ug))+
+boxtn<- ggplot(LakeChem, aes(x=month, y=tn_ug, color= lakename, shape =as.factor(month)))+
   geom_boxplot(aes(color=lakename))+
-  ylim(120,600)+
+  ylim(210,500)+
+  facet_wrap(vars(lakename), nrow = 2)+
   labs(x="Month", y="Nitrogen", color="Lake Name", title="Nitrogen concentration over the year of Peter and Paul Lakes")
 print(boxtn)
 ```
 
+```{r cowplot attempt 1}
+plot_grid(boxtemp, boxtp, boxtn, align_plots('h'), ncol = 3)
+```
+
+```{r TA suggestion}
+plot_grid(boxtemp, boxtp, boxtn, align="hv",ncol=3,rel_widths=c(1,1,1))
+```
+
+
+
 ```{r fig.height = 3, fig.width = 4, warning = FALSE}
 #Cowplot
 
-p1<-ggplot(LakeChem, aes(x=month, y=temperature_C))+
+p1<-ggplot(LakeChem, aes(x=month, y=temperature_C, color=lakename, shape=as.factor(month)))+
   geom_boxplot(aes(color=lakename))+
+  facet_wrap(vars(lakename), nrow = 2)+
   labs(x="Month", y="Temperature in Celsius", color="Lake Name", title = "Trends in Peter and Paul Lake over time")
 
-p2<-ggplot(LakeChem, aes(x=month, y=tp_ug))+
+p2<-ggplot(LakeChem, aes(x=month, y=tp_ug, color=lakename, shape=as.factor(month)))+
   geom_boxplot(aes(color=lakename))+
   ylim(5,15)+
+  facet_wrap(vars(lakename), nrow = 2)+
   labs(x="Month", y="Phosphorus", color="Lake Name")
 
-p3<-ggplot(LakeChem, aes(x=month, y=tn_ug))+
+p3<-ggplot(LakeChem, aes(x=month, y=tn_ug, color=lakename, shape=as.factor(month)))+
   geom_boxplot(aes(color=lakename))+
   ylim(120,600)+
+  facet_wrap(vars(lakename), nrow = 2)+
   labs(x="Month", y="Nitrogen", color="Lake Name")
 
 prow <- plot_grid(
@@ -126,14 +142,10 @@ prow <- plot_grid(
 )
 prow
 
-legend_b <- get_legend(
-  p1 + 
-    guides(color = guide_legend(nrow = 1)) +
-    theme(legend.position = "bottom")
-)
-
-plot_grid(prow, legend_b, ncol = 1, rel_heights = c(1, .1))
 ```
+
+
+
 
 Question: What do you observe about the variables of interest over seasons and between lakes? 
 
