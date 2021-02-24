@@ -45,8 +45,9 @@ NiwotRidge<-read.csv("/Users/mandyhooks/Environmental_Data_Analytics_2021//Data/
 
 #2 
 
-as.Date(LakeChem$sampledate)
-as.Date(GathNut$sampledate)
+LakeChem$sampledate<-as.Date(LakeChem$sampledate, format = "%Y-%m-%d")
+GathNut$sampledate<-as.Date(GathNut$sampledate, format = "%Y-%m-%d")
+NiwotRidge$collectDate<-as.Date(NiwotRidge$collectDate, format = "%Y-%m-%d")
 
 ```
 ## Define your theme
@@ -69,6 +70,7 @@ phosplot<- ggplot(LakeChem, aes(x=tp_ug, y=po4, color=lakename))+
   geom_point(alpha=1)+
   geom_smooth(method=lm, color="black")+
   ylim(0,50)+
+  xlim(0,150)+
   labs(x="Phosphorus", y="Phospate", title="Phosphorus and Phosphate by Lake", color="Lake Name")
 print(phosplot)
 
@@ -79,15 +81,15 @@ print(phosplot)
 
 ```{r fig.height = 3, fig.width = 4, warning = FALSE}
 #Temperature Boxplot
-boxtemp<-ggplot(LakeChem, aes(x=month, y=temperature_C, shape=as.factor(month)))+
-  geom_boxplot(aes(color=lakename))+
+boxtemp<-ggplot(LakeChem, aes(x=month, y=temperature_C, shape=as.factor(month), color=lakename))+
+  geom_boxplot()+
   labs(x="Month", y="Temperature in Celsius", color="Lake Name", title="Temperature over the year of Peter and Paul Lakes")
 print(boxtemp)
 
 
 #TP Boxplot
-boxtp<- ggplot(LakeChem, aes(x=month, y=tp_ug, shape= as.factor(month)))+
-  geom_boxplot(color=lakename)+
+boxtp<- ggplot(LakeChem, aes(x=month, y=tp_ug, shape= as.factor(month), color=lakename))+
+  geom_boxplot()+
   ylim(5,15)+
   facet_wrap(vars(lakename), nrow = 2)+
   labs(x="Month", y="Phosphorus", color="Lake Name", title="Phosphorus concentration over the year of Peter and Paul Lakes")
@@ -95,19 +97,11 @@ print(boxtp)
 
 #TN Boxplot
 boxtn<- ggplot(LakeChem, aes(x=month, y=tn_ug, color= lakename, shape =as.factor(month)))+
-  geom_boxplot(aes(color=lakename))+
+  geom_boxplot()+
   ylim(210,500)+
   facet_wrap(vars(lakename), nrow = 2)+
   labs(x="Month", y="Nitrogen", color="Lake Name", title="Nitrogen concentration over the year of Peter and Paul Lakes")
 print(boxtn)
-```
-
-```{r cowplot attempt 1}
-plot_grid(boxtemp, boxtp, boxtn, align_plots('h'), ncol = 3)
-```
-
-```{r TA suggestion}
-plot_grid(boxtemp, boxtp, boxtn, align="hv",ncol=3,rel_widths=c(1,1,1))
 ```
 
 
@@ -115,30 +109,31 @@ plot_grid(boxtemp, boxtp, boxtn, align="hv",ncol=3,rel_widths=c(1,1,1))
 ```{r fig.height = 3, fig.width = 4, warning = FALSE}
 #Cowplot
 
-p1<-ggplot(LakeChem, aes(x=month, y=temperature_C, color=lakename, shape=as.factor(month)))+
-  geom_boxplot(aes(color=lakename))+
-  facet_wrap(vars(lakename), nrow = 2)+
+p1<-ggplot(LakeChem, aes(x=month, y=temperature_C, color=lakename, shape= as.factor(month)))+
+  geom_boxplot()+ #I don't think you need aes here again, can you remove and try?
+  #facet_wrap(vars(lakename), nrow = 2)+
   labs(x="Month", y="Temperature in Celsius", color="Lake Name", title = "Trends in Peter and Paul Lake over time")
 
-p2<-ggplot(LakeChem, aes(x=month, y=tp_ug, color=lakename, shape=as.factor(month)))+
-  geom_boxplot(aes(color=lakename))+
+p2<-ggplot(LakeChem, aes(x=month, y=tp_ug, color=lakename, shape= as.factor(month)))+
+  geom_boxplot()+ #I don't think you need aes here again, can you remove and try?
   ylim(5,15)+
-  facet_wrap(vars(lakename), nrow = 2)+
+  #facet_wrap(vars(lakename), nrow = 2)+
   labs(x="Month", y="Phosphorus", color="Lake Name")
 
 p3<-ggplot(LakeChem, aes(x=month, y=tn_ug, color=lakename, shape=as.factor(month)))+
-  geom_boxplot(aes(color=lakename))+
+  geom_boxplot()+ #I don't think you need aes here again, can you remove and try?
   ylim(120,600)+
-  facet_wrap(vars(lakename), nrow = 2)+
+  #facet_wrap(vars(lakename), nrow = 2)+
   labs(x="Month", y="Nitrogen", color="Lake Name")
+
 
 prow <- plot_grid(
   p1 + theme(legend.position="none"),
   p2 + theme(legend.position="none"),
-  p3 + theme(legend.position="none"),
-  align = 'v',
-  hjust = -1,
-  nrow = 3
+  p3 + theme(legend.position="bottom"),
+  align="hv", 
+  ncol=1,
+  rel_widths=c(1,1,1)
 )
 prow
 
@@ -157,7 +152,8 @@ Question: What do you observe about the variables of interest over seasons and b
 ```{r fig.height = 3, fig.width = 4, warning = FALSE}
 ggplot(subset(NiwotRidge, functionalGroup=Needles), aes(x=collectDate, y=dryMass, color=nlcdClass))+
   geom_point(size=.5)+
-  labs(title="Dry mass of needles over time", x="Date Collected", y="Dry Mass", color="Class")
+  labs(title="Dry mass of needles over time", x="Date Collected", y="Dry Mass", color="Class")+
+  theme(axis.text.x = element_text(angle=45, hjust=1))
 ```
 
 
@@ -167,7 +163,8 @@ ggplot(subset(NiwotRidge, functionalGroup=Needles), aes(x=collectDate, y=dryMass
 ggplot(subset(NiwotRidge, functionalGroup=Needles), aes(x=collectDate, y=dryMass, color=nlcdClass))+
   geom_point(size=.5)+
   labs(title="Dry mass of needles over time", x="Date Collected", y="Dry Mass", color="Class")+
-  facet_wrap(vars(nlcdClass),nrow=3)
+  theme(axis.text.x = element_text(angle=45, hjust=1))+
+  facet_wrap("nlcdClass",nrow=3)
 ```
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
