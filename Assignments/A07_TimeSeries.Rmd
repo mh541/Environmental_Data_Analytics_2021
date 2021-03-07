@@ -31,6 +31,21 @@ The completed exercise is due on Tuesday, March 16 at 11:59 pm.
 
 ```{r, message = FALSE}
 #1
+getwd()
+
+library(tidyverse)
+library(zoo)
+library(lubridate)
+library(trend)
+library(dplyr)
+
+mytheme <- theme_classic(base_size = 14) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "top")
+theme_set(mytheme)
+
+#2
+EPAair<-rbind(EPAair_O3_GaringerNC2010_raw, EPAair_O3_GaringerNC2011_raw,EPAair_O3_GaringerNC2012_raw, EPAair_O3_GaringerNC2013_raw, EPAair_O3_GaringerNC2014_raw, EPAair_O3_GaringerNC2015_raw, EPAair_O3_GaringerNC2016_raw, EPAair_O3_GaringerNC2017_raw, EPAair_O3_GaringerNC2018_raw, EPAair_O3_GaringerNC2019_raw)
 
 ```
 
@@ -38,9 +53,29 @@ The completed exercise is due on Tuesday, March 16 at 11:59 pm.
 
 3. Set your date column as a date class.
 
+```{r}
+EPAair$Date<-as.Date(EPAair$Date, format = "%m/%d/%Y")
+```
+
+
 4. Wrangle your dataset so that it only contains the columns Date, Daily.Max.8.hour.Ozone.Concentration, and DAILY_AQI_VALUE. 
 
+```{r}
+EPAair<-EPAair %>%
+  select(Date, DAILY_AQI_VALUE, `Daily Max 8-hour Ozone Concentration`)
+
+
+```
+
+
 5. Notice there are a few days in each year that are missing ozone concentrations. We want to generate a daily dataset, so we will need to fill in any missing days with NA. Create a new data frame that contains a sequence of dates from 2010-01-01 to 2019-12-31 (hint: `as.data.frame(seq())`). Call this new data frame Days. Rename the column name in Days to "Date".
+
+```{r}
+Days <- EPAair %>%
+  mutate(Date = as.Date(Date)) %>%
+  complete(Date = seq.Date(min(Date), max(Date), by="day"))
+```
+
 
 6. Use a `left_join` to combine the data frames. Specify the correct order of data frames within this function so that the final dimensions are 3652 rows and 3 columns. Call your combined data frame GaringerOzone. 
 
