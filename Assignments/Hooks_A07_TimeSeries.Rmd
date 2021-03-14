@@ -217,13 +217,13 @@ ggplot(GaringerOzone.monthly, aes(x = Date, y = `mean(Concentrations_Clean)`)) +
   geom_point()+
   labs(x = "Year", y = expression("Concentration in ppm", title="Ozone Concentration overtime"))
 
-
-
+Ozone_Trend2<- trend::smk.test(GaringerOzone.monthly.ts)
+summary(Ozone_Trend2)
 ```
 
 14. To accompany your graph, summarize your results in context of the research question. Include output from the statistical test in parentheses at the end of your sentence. Feel free to use multiple sentences in your interpretation.
 
-> Answer: 
+> Answer: The graph and the seasonal Mann Kendall test suggest there is a seasonal trend in this dataset.
 
 15. Subtract the seasonal component from the `GaringerOzone.monthly.ts`. Hint: Look at how we extracted the series components for the EnoDischarge on the lesson Rmd file.
 
