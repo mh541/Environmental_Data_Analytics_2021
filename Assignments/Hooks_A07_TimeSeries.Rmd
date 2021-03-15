@@ -147,7 +147,7 @@ GaringerOzone <-
 view(GaringerOzone)
 ```
 
-> Answer: 
+> Answer: We don't use spline because we are not working with quadratic information, and we want a straight line here rather than a curve of some sort. We do not use piecewise because it would give us a date closest to the data we have, which could give us repeating days. Here, we want linear because we want to fill in the days we are missing and their corresponding data which is most likely, in this case,to be between the data we have now.
 
 
 9. Create a new data frame called `GaringerOzone.monthly` that contains aggregated data: mean ozone concentrations for each month. In your pipe, you will need to first add columns for year and month to form the groupings. In a separate line of code, create a new Date column with each month-year combination being set as the first day of the month (this is for graphing purposes only)
@@ -223,7 +223,7 @@ summary(Ozone_Trend2)
 
 14. To accompany your graph, summarize your results in context of the research question. Include output from the statistical test in parentheses at the end of your sentence. Feel free to use multiple sentences in your interpretation.
 
-> Answer: The graph and the seasonal Mann Kendall test suggest there is a seasonal trend in this dataset.
+> Answer: The graph and the seasonal Mann Kendall test suggest there is a seasonal trend in this dataset. None of the seasons are statistically significant. 
 
 15. Subtract the seasonal component from the `GaringerOzone.monthly.ts`. Hint: Look at how we extracted the series components for the EnoDischarge on the lesson Rmd file.
 
@@ -231,17 +231,14 @@ summary(Ozone_Trend2)
 
 ```{r}
 #15
-Ozone_Components <- as.data.frame(GaringerOzone.monthly.Decomposed$time.series[,1:3])
 
-Ozone_Components <- mutate(Ozone_Components,
-        Observed =GaringerOzone.monthly$`mean(Concentrations_Clean)`,     
-        Date = GaringerOzone.monthly$Date)
+GaringerOzone.monthly.noseason <- GaringerOzone.monthly.Decomposed$time.series[,2:3]
 
 #16
-
-MannKendall(GaringerOzone.monthly.ts)
+no.season.trend <- Kendall::MannKendall(GaringerOzone.monthly.noseason)
+summary(no.season.trend)
 
 
 ```
 
-> Answer: In terms of the research questions, we would accept the null and say that ozone levels have not changed at this stations throughout the 2010s.
+> Answer: The score of -16300 suggests a overall downward trend.  In terms of the research questions, we would reject the null hypothesis and say that because the p-value is less than 0.05 (2.22e-16), there is a monotonic trend.
