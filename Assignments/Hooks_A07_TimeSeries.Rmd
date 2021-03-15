@@ -206,7 +206,7 @@ summary(Ozone_Trend)
 
 ```
 
-> Answer: Yes, since the p-value is 0.04 (less than 0.05), we reject the null hypothesis and conclude that there is a seasonal trend in this series.
+> Answer: Yes, since the p-value is 0.04 (less than 0.05), we reject the null hypothesis and conclude that there is a seasonal trend in this series. Also, ozone varies a lot by weather season, with the most being in the summer. Even during the day, the most ozone occurs in the daylight hours, due to the nature of the chemical ozone. We would expect to see more ozone during daylight hours, and more ozone during summertime.
 
 13. Create a plot depicting mean monthly ozone concentrations over time, with both a geom_point and a geom_line layer. Edit your axis labels accordingly.
 
@@ -217,13 +217,13 @@ ggplot(GaringerOzone.monthly, aes(x = Date, y = `mean(Concentrations_Clean)`)) +
   geom_point()+
   labs(x = "Year", y = expression("Concentration in ppm", title="Ozone Concentration overtime"))
 
-Ozone_Trend2<- trend::smk.test(GaringerOzone.monthly.ts)
-summary(Ozone_Trend2)
+#Ozone_Trend2<- trend::smk.test(GaringerOzone.monthly.ts)
+#summary(Ozone_Trend2)
 ```
 
 14. To accompany your graph, summarize your results in context of the research question. Include output from the statistical test in parentheses at the end of your sentence. Feel free to use multiple sentences in your interpretation.
 
-> Answer: The graph and the seasonal Mann Kendall test suggest there is a seasonal trend in this dataset. None of the seasons are statistically significant. 
+> Answer: The graph and the seasonal Mann Kendall test suggest there is a seasonal trend in this dataset. None of the seasons are statistically significant. In terms of the research question, since the p-value is 0.04 (less than 0.05), we reject the null hypothesis and conclude that there is a seasonal trend in this series.
 
 15. Subtract the seasonal component from the `GaringerOzone.monthly.ts`. Hint: Look at how we extracted the series components for the EnoDischarge on the lesson Rmd file.
 
