@@ -232,7 +232,7 @@ ggplot(GaringerOzone.monthly, aes(x = Date, y = `mean(Concentrations_Clean)`)) +
 ```{r}
 #15
 
-GaringerOzone.monthly.noseason <- GaringerOzone.monthly.Decomposed$time.series[,2:3]
+GaringerOzone.monthly.noseason <- GaringerOzone.monthly.Decomposed$time.series[,1:3]
 
 #16
 no.season.trend <- Kendall::MannKendall(GaringerOzone.monthly.noseason)
@@ -241,4 +241,4 @@ summary(no.season.trend)
 
 ```
 
-> Answer: The score of -16300 suggests a overall downward trend.  In terms of the research questions, we would reject the null hypothesis and say that because the p-value is less than 0.05 (2.22e-16), there is a monotonic trend.
+> Answer: The score of -3660 suggests a overall downward trend.  In terms of the research questions, since the p-value is 0.109 we would conclude that the p-value is not statistically signficant, and therefore say that we cannot reject the null hyptothesis that says there has been no change in ozone at these stations in the 2010s.
