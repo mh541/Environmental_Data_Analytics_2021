@@ -36,6 +36,8 @@ library(tidyverse)
 library(leaflet)
 library(sf)
 library(mapview)
+remotes::install_github("r-spatial/mapview") 
+
 
 ```
 

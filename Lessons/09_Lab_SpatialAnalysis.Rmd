@@ -36,6 +36,7 @@ library(sf)
 library(leaflet)
 library(mapview)
 library(RColorBrewer)
+#mapviewOptions(basemaps = c('OpenStreetMap','Esri.WorldImagery','Stamen.Toner','Stamen.Watercolor'))
 ```
 
 # 2. ACCESSING SPATIAL DATA
@@ -81,11 +82,13 @@ mapView(counties_sf, zcol = "AWATER")
 ```{r read HUCs shapefile}
 #Read the shapefile into an sf dataframe named "huc8_sf"
 
+huc8_sf<- st_read("./Data/Spatial/NCHUC8.shp")
 
+#view(huc8_sf)
 
 #View the data as a map, colored by the acreage in each
 
-
+mapview(huc8_sf, zcol="ACRES")
 ```
 
 ### EXERCISE 2.2.2: Read a subset of data into a spatial dataframe and map it
@@ -94,11 +97,15 @@ mapView(counties_sf, zcol = "AWATER")
 
 ```{r Select the Upper Neuse HUC 8}
 #Read the shapefile into an sf dataframe
+sf_HUC8 <- st_as_sf(huc8_sf) %>%
+  filter(SUBBASIN=="Upper Neuse")
 
+view(sf_HUC8)
 
 
 #Create a map
-
+mapview(sf_HUC8)+
+  mapview(huc8_sf)
 
 ```
 
